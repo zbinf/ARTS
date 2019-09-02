@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>searchInsert</title>
+</head>
+<body>
+  <div>
+      给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+      你可以假设数组中无重复元素。
+  </div>
+
+  <script>
+    /**
+    *   题解一： 普通遍历解法
+        复杂度分析：
+          时间复杂度：最大 O(n)
+          空间复杂度：O(n)
+    */
+    function searchInsert(nums, target) {
+      if (nums.length === 0) return 0;
+      if (target > nums[nums.length - 1]) return nums.length;
+
+      const index = nums.indexOf(target);
+
+      if (index > -1) return index;
+      if (index === -1) {
+        const len = nums.length;
+        let i = 0;
+        while (i < len) {
+          const num = nums[i];
+          if (num > target) {
+            nums.splice(i, 0, target);
+            break;
+          }
+          i++;
+        }
+        return nums.indexOf(target);
+      }
+    }
+
+    searchInsert([1,3,5,6], 0);
+
+
+    /*
+    *   题解二：采用二分法
+    中位数先写 int mid = (left + right) >>> 1 ; 根据循环里分支的编写情况，再做调整
+    理解这一点，首先要知道：当数组的元素个数是偶数的时候，中位数有左中位数和右中位数之分。
+
+    当数组的元素个数是偶数的时候：
+    使用 int mid = left + (right - left) / 2 ; 得到左中位数的索引；
+
+    使用 int mid = left + (right - left + 1) / 2 ; 得到右中位数的索引。
+
+    当数组的元素个数是奇数的时候，以上二者都能选到最中间的那个中位数。
+    其次，
+
+    int mid = left + (right - left) / 2 ; 等价于 int mid = (left + right) >>> 1；
+
+    int mid = left + (right - left + 1) / 2 ; 等价于 int mid = (left + right + 1) >>> 1 。
+
+    我们使用一个具体的例子来验证：当左边界索引 left = 3，右边界索引 right = 4 的时候，
+
+    mid1 = left + (right - left) // 2 = 3 + (4 - 3) // 2 = 3 + 0 = 3，
+
+    mid2 = left + (right - left + 1) // 2 = 3 + (4 - 3 + 1) // 2 = 3 + 1 = 4。
+
+    左中位数 mid1 是索引 left，右中位数 mid2 是索引 right。
+    */
+
+    function searchInsert2(nums, target) {
+      let left = 0;
+      let right = nums.length;
+
+      if (right === 0) return 0;
+      if (target > nums[right - 1]) return right;
+
+      while (left < right) {
+        const mid = (left + right) >>> 1;
+        if (nums[mid] < target) {
+          left = mid + 1;
+        } else {
+          right = mid;
+        }
+      }
+      return left;
+    }
+
+    searchInsert2([1,3,5], 4);
+  </script>
+ 
+</body>
+</html>

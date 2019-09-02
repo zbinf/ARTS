@@ -1,6 +1,61 @@
 # 第2周 2019.09.01 - 2019.09.08
 
 ### 1.一篇算法
+  数组：
+  > 题目：给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。你可以假设数组中无重复元素。
+
+  解法一：普通遍历解法
+  
+  ```
+    function searchInsert(nums, target) {
+      if (nums.length === 0) return 0;
+      if (target > nums[nums.length - 1]) return nums.length;
+
+      const index = nums.indexOf(target);
+
+      if (index > -1) return index;
+      if (index === -1) {
+        const len = nums.length;
+        let i = 0;
+        while (i < len) {
+          const num = nums[i];
+          if (num > target) {
+            nums.splice(i, 0, target);
+            break;
+          }
+          i++;
+        }
+        return nums.indexOf(target);
+      }
+    }
+  ```
+  复杂度分析：
+
+  时间复杂度：最大 O(n)
+
+  空间复杂度：O(n)
+
+  解法二：二分法查找
+  [二分法查找的详细题解](https://leetcode-cn.com/problems/search-insert-position/solution/te-bie-hao-yong-de-er-fen-cha-fa-fa-mo-ban-python-/)
+  ```
+    function searchInsert(nums, target) {
+      let left = 0;
+      let right = nums.length;
+
+      if (right === 0) return 0;
+      if (target > nums[right - 1]) return right;
+
+      while (left < right) {
+        const mid = (left + right) >>> 1;
+        if (nums[mid] < target) {
+          left = mid + 1;
+        } else {
+          right = mid;
+        }
+      }
+      return left;
+    }
+  ```
 
 ### 2.学到的小技巧 / 知识
 
@@ -49,7 +104,8 @@
 ### 3.看一篇外语文章
 
 ### 4.分享一篇文章
-...
+
+#####  ------------------------------ 偷懒分割线  --------------------
 
 # 第0周 2019.07.22 - 2019.07.28
 
